@@ -13,18 +13,29 @@ public class SpawnManagerX : MonoBehaviour
 
     public int enemyCount;
     public int waveCount = 1;
+    public int powerUpCount = 1;
 
 
     public GameObject player; 
 
+    void Start()
+    {
+        SpawnEnemyWave(waveCount);
+        SpawnPowerUp(powerUpCount);
+    }
+
     // Update is called once per frame
     void Update()
     {
-        enemyCount = GameObject.FindGameObjectsWithTag("Powerup").Length;
+        enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
+        powerUpCount = GameObject.FindGameObjectsWithTag("Powerup").Length;
+
 
         if (enemyCount == 0)
         {
             SpawnEnemyWave(waveCount);
+            waveCount++;
+            SpawnPowerUp(powerUpCount);
         }
 
     }
@@ -40,22 +51,27 @@ public class SpawnManagerX : MonoBehaviour
 
     void SpawnEnemyWave(int enemiesToSpawn)
     {
-        Vector3 powerupSpawnOffset = new Vector3(0, 0, -15); // make powerups spawn at player end
-
-        // If no powerups remain, spawn a powerup
-        if (GameObject.FindGameObjectsWithTag("Powerup").Length == 0) // check that there are zero powerups
-        {
-            Instantiate(powerupPrefab, GenerateSpawnPosition() + powerupSpawnOffset, powerupPrefab.transform.rotation);
-        }
-
         // Spawn number of enemy balls based on wave number
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < enemiesToSpawn; i++)
         {
             Instantiate(enemyPrefab, GenerateSpawnPosition(), enemyPrefab.transform.rotation);
         }
 
-        waveCount++;
+        
         ResetPlayerPosition(); // put player back at start
+
+    }
+
+    void SpawnPowerUp(int powerUpSpawn)
+    {
+        Vector3 powerupSpawnOffset = new Vector3(0, 0, -15); // make powerups spawn at player end
+
+        // If no powerups remain, spawn a powerup
+        for (int i = 0; i < powerUpSpawn; i++) // check that there are zero powerups
+        {
+            Instantiate(powerupPrefab, GenerateSpawnPosition() + powerupSpawnOffset, powerupPrefab.transform.rotation);
+        }
+
 
     }
 
