@@ -33,11 +33,15 @@ public class SpawnManagerX : MonoBehaviour
 
         if (enemyCount == 0)
         {
-            SpawnEnemyWave(waveCount);
             waveCount++;
-            SpawnPowerUp(powerUpCount);
-        }
+            SpawnEnemyWave(waveCount);
+            if (powerUpCount == 0)
+            {
+                SpawnPowerUp(powerUpCount);
+            }
 
+        }
+        
     }
 
     // Generate random spawn position for powerups and enemy balls
